@@ -7,7 +7,13 @@ async function fetchGDELT() {
   try {
     const res = await fetch('/api/gdelt');
     const data = await res.json();
-    return (data.articles || []).slice(0, 25);
+    return (data.articles || []).slice(0, 25).map(a => ({
+      title: a.title || 'Untitled',
+      url: a.url || '#',
+      domain: a.source?.name || a.domain || '',
+      tone: null,
+      description: a.description || '',
+    }));
   } catch {
     return [];
   }
@@ -58,7 +64,7 @@ function filterArticles(articles, dials) {
       dials.depth === 1 ? depth === "medium" :
       depth === "deep";
 
-    return sentimentMatch && scopeMatch && depthMatch;
+    return true; // show all, dials highlight
   });
 }
 
