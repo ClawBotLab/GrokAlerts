@@ -3,16 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // ─── GDELT fetch (client-side proxy via public GDELT API) ───────────────────
-const GDELT_URL =
-  "https://api.gdeltproject.org/api/v2/doc/doc?query=&mode=artlist&maxrecords=25&format=json&timespan=24h&sort=datedesc";
-
 async function fetchGDELT() {
   try {
-    const res = await fetch(
-      `https://api.allorigins.win/get?url=${encodeURIComponent(GDELT_URL)}`
-    );
-    const wrapper = await res.json();
-    const data = JSON.parse(wrapper.contents);
+    const res = await fetch('/api/gdelt');
+    const data = await res.json();
     return (data.articles || []).slice(0, 25);
   } catch {
     return [];
